@@ -3,28 +3,10 @@ import SimplexNoise from './vendor/SimplexNoise';
 
 export default function Particles(options) {
     let _this = this;
-    let positions, colors, alphas, velocity;
+    let positions, alphas, velocity;
     const noise = new SimplexNoise();
 
-    /*let colorFromPosition = (function () {
-        let tmpColor = new THREE.Color(options.particlesColor);
-        let clearColor = new THREE.Color(options.clearColor);
-        let deltaR = tmpColor.r - clearColor.r;
-        let deltaG = tmpColor.g - clearColor.g;
-        let deltaB = tmpColor.b - clearColor.b;
-        return function (nx, ny, nz) {
-            //tmpColor.setRGB(nx, ny, nz);
-            //let hsl = tmpColor.getHSL();
-            let opacity;
-            if (ny < 0.2 || ny > 0.8) {
-                opacity = Math.abs(Math.abs(ny - 0.5) - 0.5) * 5;
-            } else {
-                opacity = 1;
-            }
-            return tmpColor.setRGB(clearColor.r + deltaR * opacity, clearColor.g + deltaG * opacity, clearColor.b + deltaB * opacity);
-            //return tmpColor.setHSL(hsl.h, opacity, Math.max(opacity / 2, 0.08));
-        }
-    })();*/
+
     function alphaFromPosition(ny) {
         let opacity;
         if (ny < 0.2 || ny > 0.8) {
@@ -64,14 +46,8 @@ export default function Particles(options) {
             positions[i] = radius * Math.cos(angle) * size2;
             positions[i + 1] = Math.random() * options.sizeH - sizeH2;
             positions[i + 2] = radius * Math.sin(angle) * size2;
-            // colors
-            //let nx = positions[i] / options.size + 0.5;
+            // alphas
             let ny = positions[i + 1] / options.sizeH + 0.5;
-            //let nz = positions[i + 2] / options.size + 0.5;
-            // let color = colorFromPosition(nx, ny, nz);
-            // colors[i]     = color.r;
-            // colors[i + 1] = color.g;
-            // colors[i + 2] = color.b;
             alphas[i / 3] = alphaFromPosition(ny);
         }
     };
@@ -79,14 +55,12 @@ export default function Particles(options) {
     function init() {
         let geometry = new THREE.BufferGeometry();
         positions = new Float32Array(options.particlesCount * 3);
-        //colors = new Float32Array(options.particlesCount * 3);
         alphas = new Float32Array(options.particlesCount);
         velocity = new Float32Array(options.particlesCount * 3);
 
         _this.fillParticleData();
 
         geometry.addAttribute('position', new THREE.BufferAttribute(positions, 3).setDynamic(true));
-        //geometry.addAttribute('color', new THREE.BufferAttribute(colors, 3).setDynamic(true));
         geometry.addAttribute('alpha', new THREE.BufferAttribute(alphas, 1).setDynamic(true));
         geometry.computeBoundingSphere();
         //
@@ -95,7 +69,6 @@ export default function Particles(options) {
         let uniforms = {
             size: {value: options.particlesSize},
             color: {value: new THREE.Color(options.particlesColor)},
-            //texture: {value: new THREE.TextureLoader().load("disc.png")}
             texture: {value: generateTexture()}
         };
         // point cloud material
@@ -159,15 +132,10 @@ export default function Particles(options) {
                 velocity[i] = Math.random() - 0.5;
                 velocity[i + 2] = Math.random() - 0.5;
             }
-            // colors
-            // let color = colorFromPosition(nx, ny, nz);
-            // colors[i]     = color.r;
-            // colors[i + 1] = color.g;
-            // colors[i + 2] = color.b;
+            // alphas
             alphas[i / 3] = alphaFromPosition(ny);
         }
         _this.particleCloud.geometry.attributes.position.needsUpdate = true;
-        //_this.particleCloud.geometry.attributes.color.needsUpdate = true;
         _this.particleCloud.geometry.attributes.alpha.needsUpdate = true;
 
         _this.particleCloud.rotation.y =  time * 0.00007;

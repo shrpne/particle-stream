@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -43373,37 +43373,16 @@ function CanvasRenderer() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_three__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vendor_SimplexNoise__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vendor_SimplexNoise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__vendor_SimplexNoise__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shaders_particles_vert__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shaders_particles_vert___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__shaders_particles_vert__);
 /* harmony export (immutable) */ __webpack_exports__["a"] = Particles;
-
 
 
 
 function Particles(options) {
     let _this = this;
-    let positions, colors, alphas, velocity;
+    let positions, alphas, velocity;
     const noise = new __WEBPACK_IMPORTED_MODULE_1__vendor_SimplexNoise___default.a();
 
-    /*let colorFromPosition = (function () {
-        let tmpColor = new THREE.Color(options.particlesColor);
-        let clearColor = new THREE.Color(options.clearColor);
-        let deltaR = tmpColor.r - clearColor.r;
-        let deltaG = tmpColor.g - clearColor.g;
-        let deltaB = tmpColor.b - clearColor.b;
-        return function (nx, ny, nz) {
-            //tmpColor.setRGB(nx, ny, nz);
-            //let hsl = tmpColor.getHSL();
-            let opacity;
-            if (ny < 0.2 || ny > 0.8) {
-                opacity = Math.abs(Math.abs(ny - 0.5) - 0.5) * 5;
-            } else {
-                opacity = 1;
-            }
-            return tmpColor.setRGB(clearColor.r + deltaR * opacity, clearColor.g + deltaG * opacity, clearColor.b + deltaB * opacity);
-            //return tmpColor.setHSL(hsl.h, opacity, Math.max(opacity / 2, 0.08));
-        }
-    })();*/
+
     function alphaFromPosition(ny) {
         let opacity;
         if (ny < 0.2 || ny > 0.8) {
@@ -43443,14 +43422,8 @@ function Particles(options) {
             positions[i] = radius * Math.cos(angle) * size2;
             positions[i + 1] = Math.random() * options.sizeH - sizeH2;
             positions[i + 2] = radius * Math.sin(angle) * size2;
-            // colors
-            //let nx = positions[i] / options.size + 0.5;
+            // alphas
             let ny = positions[i + 1] / options.sizeH + 0.5;
-            //let nz = positions[i + 2] / options.size + 0.5;
-            // let color = colorFromPosition(nx, ny, nz);
-            // colors[i]     = color.r;
-            // colors[i + 1] = color.g;
-            // colors[i + 2] = color.b;
             alphas[i / 3] = alphaFromPosition(ny);
         }
     };
@@ -43458,14 +43431,12 @@ function Particles(options) {
     function init() {
         let geometry = new __WEBPACK_IMPORTED_MODULE_0_three__["BufferGeometry"]();
         positions = new Float32Array(options.particlesCount * 3);
-        //colors = new Float32Array(options.particlesCount * 3);
         alphas = new Float32Array(options.particlesCount);
         velocity = new Float32Array(options.particlesCount * 3);
 
         _this.fillParticleData();
 
         geometry.addAttribute('position', new __WEBPACK_IMPORTED_MODULE_0_three__["BufferAttribute"](positions, 3).setDynamic(true));
-        //geometry.addAttribute('color', new THREE.BufferAttribute(colors, 3).setDynamic(true));
         geometry.addAttribute('alpha', new __WEBPACK_IMPORTED_MODULE_0_three__["BufferAttribute"](alphas, 1).setDynamic(true));
         geometry.computeBoundingSphere();
         //
@@ -43474,13 +43445,12 @@ function Particles(options) {
         let uniforms = {
             size: {value: options.particlesSize},
             color: {value: new __WEBPACK_IMPORTED_MODULE_0_three__["Color"](options.particlesColor)},
-            //texture: {value: new THREE.TextureLoader().load("disc.png")}
             texture: {value: generateTexture()}
         };
         // point cloud material
         let material = new __WEBPACK_IMPORTED_MODULE_0_three__["ShaderMaterial"]({
             uniforms: uniforms,
-            vertexShader: __WEBPACK_IMPORTED_MODULE_2__shaders_particles_vert__["default"],
+            vertexShader: document.getElementById('vertexshader').textContent,
             fragmentShader: document.getElementById('fragmentshader').textContent,
             //blending: THREE.SubtractiveBlending,
             depthTest: false,
@@ -43538,15 +43508,10 @@ function Particles(options) {
                 velocity[i] = Math.random() - 0.5;
                 velocity[i + 2] = Math.random() - 0.5;
             }
-            // colors
-            // let color = colorFromPosition(nx, ny, nz);
-            // colors[i]     = color.r;
-            // colors[i + 1] = color.g;
-            // colors[i + 2] = color.b;
+            // alphas
             alphas[i / 3] = alphaFromPosition(ny);
         }
         _this.particleCloud.geometry.attributes.position.needsUpdate = true;
-        //_this.particleCloud.geometry.attributes.color.needsUpdate = true;
         _this.particleCloud.geometry.attributes.alpha.needsUpdate = true;
 
         _this.particleCloud.rotation.y =  time * 0.00007;
@@ -49415,12 +49380,6 @@ if (true) {
 
 /***/ }),
 /* 7 */
-/***/ (function(module, exports) {
-
-throw new Error("Module parse failed: D:\\xampp\\htdocs\\www\\omskcarbon\\demo\\shaders\\particles.vert Unexpected token (1:8)\nYou may need an appropriate loader to handle this file type.\n| uniform float size;\r\n| attribute float alpha;\r\n| varying float vAlpha;\r");
-
-/***/ }),
-/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49448,7 +49407,7 @@ if (! __WEBPACK_IMPORTED_MODULE_0__vendor_Detector___default.a.webgl) __WEBPACK_
 
 let options = new function() {
     this.size = 700; // particles spread in the plane
-    this.sizeH= 2100; // particles spread in height
+    this.sizeH = 2100; // particles spread in height
     this.noiseModifer = 0.95;
     this.noiseStrength = 0.15;
     this.velocitySlowing = 0.99;
@@ -49486,7 +49445,6 @@ function init() {
     scene = new __WEBPACK_IMPORTED_MODULE_1_three__["Scene"]();
     scene.fog = new __WEBPACK_IMPORTED_MODULE_1_three__["Fog"](options.clearColor, 1000, 15000);
     //
-
     scene.add(particles.particleCloud);
     //
     renderer = new __WEBPACK_IMPORTED_MODULE_1_three__["WebGLRenderer"]({ antialias: false, logarithmicDepthBuffer: true });
@@ -49517,7 +49475,6 @@ function animate() {
     orbit.update();
 
     requestAnimationFrame(animate);
-    //setTimeout(animate, 500)
 }
 
 

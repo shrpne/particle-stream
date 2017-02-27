@@ -12,7 +12,7 @@ import Particles from './Particles'
 
 let options = new function() {
     this.size = 700; // particles spread in the plane
-    this.sizeH= 2100; // particles spread in height
+    this.sizeH = 2100; // particles spread in height
     this.noiseModifer = 0.95;
     this.noiseStrength = 0.15;
     this.velocitySlowing = 0.99;
@@ -50,7 +50,6 @@ function init() {
     scene = new THREE.Scene();
     scene.fog = new THREE.Fog(options.clearColor, 1000, 15000);
     //
-
     scene.add(particles.particleCloud);
     //
     renderer = new THREE.WebGLRenderer({ antialias: false, logarithmicDepthBuffer: true });
@@ -81,7 +80,6 @@ function animate() {
     orbit.update();
 
     requestAnimationFrame(animate);
-    //setTimeout(animate, 500)
 }
 
 
