@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo</title>
+    <style>
+        body {margin: 0;}
+        canvas {display: block;}
+    </style>
+</head>
+<body>
+
+<div id="container"></div>
+
+<!--<script src="js/vendor/three.js"></script>
+
+<script src="js/vendor/Detector.js"></script>
+<script src="js/vendor/OrbitControls.js"></script>
+<script src="js/vendor/dat.gui.js"></script>
+<script src="js/vendor/stats.min.js"></script>
+<script src="js/vendor/SimplexNoise.js"></script>-->
+
+<script type="x-shader/x-vertex" id="vertexshader">
+    uniform float size;
+    attribute float alpha;
+    varying float vAlpha;
+    void main() {
+        vAlpha = alpha;
+        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+        gl_PointSize = size * (400.0 / -mvPosition.z);
+        gl_Position = projectionMatrix * mvPosition;
+    }
+</script>
+<script type="x-shader/x-fragment" id="fragmentshader">
+    uniform vec3 color;
+    uniform sampler2D texture;
+    varying float vAlpha;
+    void main() {
+        gl_FragColor = vec4(color, vAlpha);
+		gl_FragColor = gl_FragColor * texture2D(texture, gl_PointCoord);
+//		if (gl_FragColor.a < 0.1 && vAlpha > 0.1) {
+//            discard;
+//        }
+    }
+</script>
+
+<script src="js/bundle.js"></script>
+
+
+
+
+
+
+</body>
+</html>

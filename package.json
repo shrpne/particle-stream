@@ -1,0 +1,55 @@
+{
+  "name": "particles-stream",
+  "version": "1.0.0",
+  "description": "webgl",
+  "main": "gulpfile.js",
+  "scripts": {
+    "build": "gulp scripts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "directories": {
+    "man": "man"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shrpne/particles-stream.git"
+  },
+  "keywords": [],
+  "author": "shrpne",
+  "license": "ISC",
+  "dependencies": {
+    "dat.gui": "^0.6.1",
+    "stats.js": "^0.17.0",
+    "three": "0.84.0",
+    "three-orbit-controls": "^82.1.0"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.22.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-concat": "^2.6.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^2.0.0",
+    "gulp-util": "^3.0.7",
+    "path": "^0.12.7",
+    "webpack": "^2.2.1",
+    "webpack-stream": "^3.2.0"
+  },
+  "babel": {
+    "presets": [
+      [
+        "es2015",
+        {
+          "modules": false
+        }
+      ]
+    ],
+    "compact": true
+  },
+  "browserslist": [
+    "> 0.1%",
+    "last 3 versions",
+    "Firefox ESR"
+  ]
+}
